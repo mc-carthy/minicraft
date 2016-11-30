@@ -31,30 +31,13 @@ public class Chunk : MonoBehaviour {
 		chunkCollider = GetComponent<MeshCollider>();
 
 		CubeTop(0, 0, 0, (byte)TextureType.rock.GetHashCode());
+		CubeNorth(0, 0, 0, (byte)TextureType.rock.GetHashCode());
+		CubeEast(0, 0, 0, (byte)TextureType.rock.GetHashCode());
+		CubeSouth(0, 0, 0, (byte)TextureType.rock.GetHashCode());
+		CubeWest(0, 0, 0, (byte)TextureType.rock.GetHashCode());
+		CubeBottom(0, 0, 0, (byte)TextureType.rock.GetHashCode());
+
 		UpdateMesh();
-	}
-
-	private void CubeTop (int x, int y, int z, byte block) {
-		newVertices.Add(new Vector3(x, y, z + 1));
-		newVertices.Add(new Vector3(x + 1, y, z + 1));
-		newVertices.Add(new Vector3(x + 1, y, z));
-		newVertices.Add(new Vector3(x, y, z));
-
-		newTriangles.Add(faceCount * 4);
-		newTriangles.Add(faceCount * 4 + 1);
-		newTriangles.Add(faceCount * 4 + 2);
-
-		newTriangles.Add(faceCount * 4);
-		newTriangles.Add(faceCount * 4 + 2);
-		newTriangles.Add(faceCount * 4 + 3);
-
-		Vector2 texturePos;
-		texturePos = rock; // TODO - Currently hardcoded
-
-		newUV.Add(new Vector2(textureWidth * texturePos.x + textureWidth, textureWidth * texturePos.y));
-		newUV.Add(new Vector2(textureWidth * texturePos.x + textureWidth, textureWidth * texturePos.y + textureWidth));
-		newUV.Add(new Vector2(textureWidth * texturePos.x, textureWidth * texturePos.y + textureWidth));
-		newUV.Add(new Vector2(textureWidth * texturePos.x, textureWidth * texturePos.y));
 	}
 
 	private void UpdateMesh () {
@@ -74,4 +57,93 @@ public class Chunk : MonoBehaviour {
 		faceCount = 0;
 	}
 
+	private void Cube (Vector2 texturePos) {
+
+		newTriangles.Add(faceCount * 4);
+		newTriangles.Add(faceCount * 4 + 1);
+		newTriangles.Add(faceCount * 4 + 2);
+
+		newTriangles.Add(faceCount * 4);
+		newTriangles.Add(faceCount * 4 + 2);
+		newTriangles.Add(faceCount * 4 + 3);
+
+		newUV.Add(new Vector2(textureWidth * texturePos.x + textureWidth, textureWidth * texturePos.y));
+		newUV.Add(new Vector2(textureWidth * texturePos.x + textureWidth, textureWidth * texturePos.y + textureWidth));
+		newUV.Add(new Vector2(textureWidth * texturePos.x, textureWidth * texturePos.y + textureWidth));
+		newUV.Add(new Vector2(textureWidth * texturePos.x, textureWidth * texturePos.y));
+
+		faceCount++;
+	}
+
+	private void CubeTop (int x, int y, int z, byte block) {
+		newVertices.Add(new Vector3(x, y, z + 1));
+		newVertices.Add(new Vector3(x + 1, y, z + 1));
+		newVertices.Add(new Vector3(x + 1, y, z));
+		newVertices.Add(new Vector3(x, y, z));
+
+		Vector2 texturePos;
+		texturePos = rock; // TODO - Currently hardcoded
+
+		Cube(texturePos);
+	}
+
+	private void CubeNorth (int x, int y, int z, byte block) {
+		newVertices.Add(new Vector3(x + 1, y - 1, z + 1));
+		newVertices.Add(new Vector3(x + 1, y, z + 1));
+		newVertices.Add(new Vector3(x, y, z + 1));
+		newVertices.Add(new Vector3(x, y - 1, z + 1));
+
+		Vector2 texturePos;
+		texturePos = rock; // TODO - Currently hardcoded
+
+		Cube(texturePos);
+	}
+
+	private void CubeEast (int x, int y, int z, byte block) {
+		newVertices.Add(new Vector3(x + 1, y - 1, z));
+		newVertices.Add(new Vector3(x + 1, y, z));
+		newVertices.Add(new Vector3(x + 1, y, z + 1));
+		newVertices.Add(new Vector3(x + 1, y - 1, z + 1));
+
+		Vector2 texturePos;
+		texturePos = rock; // TODO - Currently hardcoded
+
+		Cube(texturePos);
+	}
+
+	private void CubeSouth (int x, int y, int z, byte block) {
+		newVertices.Add(new Vector3(x, y - 1, z));
+		newVertices.Add(new Vector3(x, y, z));
+		newVertices.Add(new Vector3(x + 1, y, z));
+		newVertices.Add(new Vector3(x + 1, y - 1, z));
+
+		Vector2 texturePos;
+		texturePos = rock; // TODO - Currently hardcoded
+
+		Cube(texturePos);
+	}
+
+	private void CubeWest (int x, int y, int z, byte block) {
+		newVertices.Add(new Vector3(x, y - 1, z + 1));
+		newVertices.Add(new Vector3(x, y, z + 1));
+		newVertices.Add(new Vector3(x, y, z));
+		newVertices.Add(new Vector3(x, y - 1, z));
+
+		Vector2 texturePos;
+		texturePos = rock; // TODO - Currently hardcoded
+
+		Cube(texturePos);
+	}
+
+	private void CubeBottom (int x, int y, int z, byte block) {
+		newVertices.Add(new Vector3(x, y - 1, z));
+		newVertices.Add(new Vector3(x + 1, y - 1, z));
+		newVertices.Add(new Vector3(x + 1, y - 1, z + 1));
+		newVertices.Add(new Vector3(x, y - 1, z + 1));
+
+		Vector2 texturePos;
+		texturePos = rock; // TODO - Currently hardcoded
+
+		Cube(texturePos);
+	}
 }
