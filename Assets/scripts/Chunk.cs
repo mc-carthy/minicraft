@@ -21,6 +21,12 @@ public class Chunk : MonoBehaviour {
 	private MeshCollider chunkCollider;
 	private float textureWidth = 0.083f;
 	private int faceCount;
+	private World world;
+
+	[SerializeField]
+	private GameObject worldGO;
+	[SerializeField]
+	private int chunkSize = 16;
 
 	private Vector2 grassTop = new Vector2(1, 11);
 	private Vector2 grassSide = new Vector2(0, 10);
@@ -29,14 +35,44 @@ public class Chunk : MonoBehaviour {
 	private void Start () {
 		mesh = GetComponent<MeshFilter>().mesh;
 		chunkCollider = GetComponent<MeshCollider>();
+		world = worldGO.GetComponent<World>() as World;
 
-		CubeTop(0, 0, 0, (byte)TextureType.rock.GetHashCode());
-		CubeNorth(0, 0, 0, (byte)TextureType.rock.GetHashCode());
-		CubeEast(0, 0, 0, (byte)TextureType.rock.GetHashCode());
-		CubeSouth(0, 0, 0, (byte)TextureType.rock.GetHashCode());
-		CubeWest(0, 0, 0, (byte)TextureType.rock.GetHashCode());
-		CubeBottom(0, 0, 0, (byte)TextureType.rock.GetHashCode());
+		GenerateMesh();
+	}
 
+	private void GenerateMesh () {
+		for (int x = 0; x < chunkSize; x++) {
+			for (int y = 0; y < chunkSize; y++) {
+				for (int z = 0; z < chunkSize; z++) {
+					if (world.Block(x, y, z) != (byte)TextureType.air.GetHashCode()) {
+						// Block above is air
+						if (world.Block(x, y + 1, z) == (byte)TextureType.air.GetHashCode()) {
+							CubeTop(x, y, z, world.Block(x, y, z));
+						}
+						// Block below is air
+						if (world.Block(x, y - 1, z) == (byte)TextureType.air.GetHashCode()) {
+							CubeBottom(x, y, z, world.Block(x, y, z));
+						}
+						// Block to east is air
+						if (world.Block(x + 1, y, z) == (byte)TextureType.air.GetHashCode()) {
+							CubeEast(x, y, z, world.Block(x, y, z));
+						}
+						// Block to west is air
+						if (world.Block(x - 1, y, z) == (byte)TextureType.air.GetHashCode()) {
+							CubeWest(x, y, z, world.Block(x, y, z));
+						}
+						// Block to north is air
+						if (world.Block(x, y, z + 1) == (byte)TextureType.air.GetHashCode()) {
+							CubeNorth(x, y, z, world.Block(x, y, z));
+						}
+						// Block to south is air
+						if (world.Block(x, y, z - 1) == (byte)TextureType.air.GetHashCode()) {
+							CubeSouth(x, y, z, world.Block(x, y, z));
+						}
+					}
+				}
+			}
+		}
 		UpdateMesh();
 	}
 
