@@ -162,8 +162,13 @@ public class Chunk : MonoBehaviour {
 		newVertices.Add(new Vector3(x + 1, y, z));
 		newVertices.Add(new Vector3(x, y, z));
 
-		Vector2 texturePos;
-		texturePos = rock; // TODO - Currently hardcoded
+		Vector2 texturePos = new Vector2(0, 0);
+
+		if (block == (byte)TextureType.rock.GetHashCode()) {
+			texturePos = rock;
+		} else if (block == (byte)TextureType.grass.GetHashCode()) {
+			texturePos = grassTop;
+		}
 
 		Cube(texturePos);
 	}
@@ -174,8 +179,7 @@ public class Chunk : MonoBehaviour {
 		newVertices.Add(new Vector3(x, y, z + 1));
 		newVertices.Add(new Vector3(x, y - 1, z + 1));
 
-		Vector2 texturePos;
-		texturePos = rock; // TODO - Currently hardcoded
+		Vector2 texturePos = SetSideTextures(x, y, z, block);
 
 		Cube(texturePos);
 	}
@@ -186,8 +190,7 @@ public class Chunk : MonoBehaviour {
 		newVertices.Add(new Vector3(x + 1, y, z + 1));
 		newVertices.Add(new Vector3(x + 1, y - 1, z + 1));
 
-		Vector2 texturePos;
-		texturePos = rock; // TODO - Currently hardcoded
+		Vector2 texturePos = SetSideTextures(x, y, z, block);
 
 		Cube(texturePos);
 	}
@@ -198,8 +201,7 @@ public class Chunk : MonoBehaviour {
 		newVertices.Add(new Vector3(x + 1, y, z));
 		newVertices.Add(new Vector3(x + 1, y - 1, z));
 
-		Vector2 texturePos;
-		texturePos = rock; // TODO - Currently hardcoded
+		Vector2 texturePos = SetSideTextures(x, y, z, block);
 
 		Cube(texturePos);
 	}
@@ -210,8 +212,7 @@ public class Chunk : MonoBehaviour {
 		newVertices.Add(new Vector3(x, y, z));
 		newVertices.Add(new Vector3(x, y - 1, z));
 
-		Vector2 texturePos;
-		texturePos = rock; // TODO - Currently hardcoded
+		Vector2 texturePos = SetSideTextures(x, y, z, block);
 
 		Cube(texturePos);
 	}
@@ -222,10 +223,19 @@ public class Chunk : MonoBehaviour {
 		newVertices.Add(new Vector3(x + 1, y - 1, z + 1));
 		newVertices.Add(new Vector3(x, y - 1, z + 1));
 
-		Vector2 texturePos;
-		texturePos = rock; // TODO - Currently hardcoded
+		Vector2 texturePos = SetSideTextures(x, y, z, block);
 
 		Cube(texturePos);
+	}
+
+	private Vector2 SetSideTextures (int x, int y, int z, byte block) {
+		Vector2 texturePos = new Vector2(0,0);
+		if (block == (byte)TextureType.rock.GetHashCode()) {
+			texturePos = rock;
+		} else if (block == (byte)TextureType.grass.GetHashCode()) {
+			texturePos = grassSide;
+		}
+		return texturePos;
 	}
 
 	private byte Block (int x, int y, int z) {

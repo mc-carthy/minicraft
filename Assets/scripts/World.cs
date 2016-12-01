@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Noise;
 
 public class World : MonoBehaviour {
 
@@ -12,6 +13,44 @@ public class World : MonoBehaviour {
 	private int worldZ = 16;
 	[SerializeField]
 	private int chunkSize = 16;
+	[SerializeField]
+	private int rockInitialY;
+	[SerializeField]
+	private float rockPerlinScale;
+	[SerializeField]
+	private int rockPerlinHeight;
+	[SerializeField]
+	private float rockPerlinPower;
+	[SerializeField]
+	private int rockUnkownY;
+	[SerializeField]
+	private float rockSecondPerlinScale;
+	[SerializeField]
+	private int rockSecondPerlinHeight;
+	[SerializeField]
+	private float rockSecondPerlinPower;
+	[SerializeField]
+	private int rockSecondPerlinConstant;
+	[SerializeField]
+	private int grassInitialY;
+	[SerializeField]
+	private float grassPerlinScale;
+	[SerializeField]
+	private int grassPerlinHeight;
+	[SerializeField]
+	private float grassPerlinPower;
+	[SerializeField]
+	private int grassPerlinConstant;
+	[SerializeField]
+	private int grassUnkownY;
+	[SerializeField]
+	private float grassSecondPerlinScale;
+	[SerializeField]
+	private int grassSecondPerlinHeight;
+	[SerializeField]
+	private float grassSecondPerlinPower;
+	[SerializeField]
+	private int grassSecondPerlinConstant;
 
 	private byte[,,] worldData;
 	private Chunk[,,] chunks;
@@ -20,9 +59,15 @@ public class World : MonoBehaviour {
 		worldData = new byte[worldX, worldY, worldZ];
 
 		for (int x = 0; x < worldX; x++) {
-			for (int y = 0; y < worldY; y++) {
-				for (int z = 0; z < worldZ; z++) {
-					if (y <= 8) {
+			for (int z = 0; z < worldZ; z++) {
+				int rock = PerlinNoise(x, 0, z, rockPerlinScale, rockPerlinHeight, rockPerlinPower);
+				rock += PerlinNoise(x, rockUnkownY, z, rockSecondPerlinScale, rockSecondPerlinHeight, rockSecondPerlinPower) + rockSecondPerlinConstant;
+				int grass = PerlinNoise(x, 0, z, grassPerlinScale, grassPerlinHeight, grassPerlinPower);
+				// grass += PerlinNoise(x, grassUnkownY, z, grassSecondPerlinScale, grassSecondPerlinHeight, grassSecondPerlinPower);
+				for (int y = 0; y < worldY; y++) {
+					if (y <= rock) {
+						worldData[x, y, z] = (byte)TextureType.grass.GetHashCode();
+					} else if (y <= grass) {
 						worldData[x, y, z] = (byte)TextureType.rock.GetHashCode();
 					}
 				}
@@ -49,6 +94,17 @@ public class World : MonoBehaviour {
 			}
 		}
 
+	}
+
+	public int PerlinNoise (int x, int y, int z, float scale, float height, float power) {
+		float perlinValue = Noise.Noise.GetNoise((double)x / scale, (double)y / scale, (double)z / scale);
+		perlinValue *= height;
+
+		if (power != 0) {
+			perlinValue = Mathf.Pow(perlinValue, power);
+		}
+
+		return (int)perlinValue;
 	}
 
 	public byte Block (int x, int y, int z) {
