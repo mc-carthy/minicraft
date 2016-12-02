@@ -1,16 +1,47 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class GameManager : MonoBehaviour {
+public class GameManager : Singleton<GameManager> {
 
-	// Use this for initialization
-	void Start () {
-		
+	private bool isJumping;
+	public bool IsJumping {
+		get {
+			return isJumping;
+		}
+		set {
+			isJumping = value;
+		}
+	}
+
+	private bool isPunching;
+	public bool IsPunching {
+		get {
+			return isPunching;
+		}
+		set {
+			isPunching = value;
+		}
 	}
 	
-	// Update is called once per frame
-	void Update () {
-		
+	private bool isBuilding;
+	public bool IsBuilding {
+		get {
+			return isBuilding;
+		}
+		set {
+			isBuilding = value;
+		}
 	}
+
+	public void JumpButton () {
+		IsJumping = true;
+	}
+
+	public void PunchButton () {
+		IsPunching = true;
+	}
+
+	public void BuildButton () {
+		IsBuilding = true;
+	}
+	
 }
