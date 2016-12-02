@@ -19,7 +19,17 @@ public class CharacterControl : MonoBehaviour {
 	}
 
 	private void Update () {
+		Move();
+	}
+
+	private void Move () {
 		Vector3 moveChar = new Vector3(CrossPlatformInputManager.GetAxis("Horizontal"), 0, CrossPlatformInputManager.GetAxis("Vertical"));
 		transform.position += moveChar * moveSpeed * Time.deltaTime;
+
+		if (moveChar == Vector3.zero) {
+			anim.SetBool("isWalking", false);
+		} else {
+			anim.SetBool("isWalking", true);
+		}
 	}
 }
