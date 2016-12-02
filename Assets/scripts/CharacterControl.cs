@@ -20,6 +20,7 @@ public class CharacterControl : MonoBehaviour {
 
 	private void Update () {
 		Move();
+		RegisterButtonPresses();
 	}
 
 	private void Move () {
@@ -30,6 +31,24 @@ public class CharacterControl : MonoBehaviour {
 			anim.SetBool("isWalking", false);
 		} else {
 			anim.SetBool("isWalking", true);
+		}
+	}
+
+	private void RegisterButtonPresses() {
+		if (GameManager.Instance.IsJumping) {
+			anim.SetTrigger("jump");
+			rb.AddForce(Vector3.up * jumpHeight, ForceMode.Impulse);
+			GameManager.Instance.IsJumping = false;
+		}
+
+		if (GameManager.Instance.IsJumping) {
+			anim.SetTrigger("punch");
+			GameManager.Instance.IsPunching = false;
+		}
+
+		if (GameManager.Instance.IsJumping) {
+			anim.SetTrigger("punch");
+			GameManager.Instance.IsBuilding = false;
 		}
 	}
 }
