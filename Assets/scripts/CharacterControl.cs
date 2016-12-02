@@ -14,10 +14,12 @@ public class CharacterControl : MonoBehaviour {
 
 	private Rigidbody rb;
 	private Animator anim;
+	private AudioSource source;
 
 	private void Start () {
 		rb = GetComponent<Rigidbody>();
 		anim = GetComponent<Animator>();
+		source = GetComponent<AudioSource>();
 	}
 
 	private void Update () {
@@ -43,18 +45,21 @@ public class CharacterControl : MonoBehaviour {
 		if (GameManager.Instance.IsJumping) {
 			anim.SetTrigger("jump");
 			rb.AddForce(Vector3.up * jumpHeight, ForceMode.Impulse);
+			source.PlayOneShot(AudioManager.Instance.Jump);
 			GameManager.Instance.IsJumping = false;
 		}
 
 		if (GameManager.Instance.IsPunching) {
 			anim.SetTrigger("punch");
 			ModifyTerrain.Instance.DestroyBlock(10f, (byte)TextureType.air.GetHashCode());
+			source.PlayOneShot(AudioManager.Instance.Hit);
 			GameManager.Instance.IsPunching = false;
 		}
 
 		if (GameManager.Instance.IsBuilding) {
 			anim.SetTrigger("punch");
 			ModifyTerrain.Instance.AddBlock(10f, (byte)TextureType.rock.GetHashCode());
+			source.PlayOneShot(AudioManager.Instance.Build);
 			GameManager.Instance.IsBuilding = false;
 		}
 	}
