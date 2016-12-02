@@ -1,13 +1,19 @@
 ﻿using UnityEngine;
+using System.Collections;
 
 public class ModifyTerrain : Singleton<ModifyTerrain> {
 
+	[SerializeField]
+	private float newChunkCheckTime = 1f;
 	private World world;
 	private GameObject player;
+	private float distToLoad = 50f;
+	private float distToDestroy = 60f;
 
 	private void Start () {
 		world = GetComponent<World>();
 		player = GameObject.FindGameObjectWithTag("Player");
+		StartCoroutine(UpdateChunks());
 	}
 
 	public void AddBlock (float range, byte block) {
@@ -59,5 +65,29 @@ public class ModifyTerrain : Singleton<ModifyTerrain> {
 		int updateZ = Mathf.FloorToInt(z / world.ChunkSize);
 
 		world.Chunks[updateX, updateY, updateZ].IsUpdate = true;
+	}
+
+	public void LoadChunks (Vector3 playerPos, float distToLoad, float distToDestroy) {
+		for (int x = 0; x < world.Chunks.GetLength(0); x++) {
+			for (int z = 0; z < world.Chunks.GetLength(2); z++) {
+				float dist = Vector2.Distance(new Vector2( x * world.ChunkSize, z * world.ChunkSize), new Vector2(playerPos.x, playerPos.z));
+
+				if (dist < distToLoad) {
+					if (world.Chunks[x, 0, z] == null) {
+						world.GenerateChunk(x, z);
+					}
+				} else if (dist > distToDestroy) {
+					if (world.Chunks[x, 0, z] != null) {
+						world.DestroyChunk(x, z);
+					}
+				}
+			}
+		}
+	}
+
+	private IEnumerator UpdateChunks () {
+		LoadChunks(player.transform.position, distToLoad, distToDestroy);
+		yield return new WaitForSeconds(newChunkCheckTime);
+		StartCoroutine(UpdateChunks());
 	}
 }

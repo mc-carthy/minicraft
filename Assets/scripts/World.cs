@@ -134,4 +134,22 @@ public class World : MonoBehaviour {
 		}
 		return worldData[x, y, z];
 	}
+
+	public void GenerateChunk (int x, int z) {
+		for (int y = 0; y < chunks.GetLength(1); y++) {
+			GameObject newChunk = Instantiate(chunk, new Vector3(x * chunkSize - 0.5f, y * chunkSize + 0.5f, z * chunkSize - 0.5f), Quaternion.identity) as GameObject;
+			chunks[x, y, z] = newChunk.GetComponent<Chunk>();
+			chunks[x, y, z].WorldGo = gameObject;
+			chunks[x, y, z].ChunkX = x * chunkSize;
+			chunks[x, y, z].ChunkY = y * chunkSize;
+			chunks[x, y, z].ChunkZ = z * chunkSize;
+			chunks[x, y, z].ChunkSize = chunkSize;
+		}
+	}
+
+	public void DestroyChunk (int x, int z) {
+		for (int y = 0; y < chunks.GetLength(1); y++) {
+			Destroy(Chunks[x, y, z].gameObject);
+		}
+	}
 }
