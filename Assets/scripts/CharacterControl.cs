@@ -36,7 +36,7 @@ public class CharacterControl : MonoBehaviour {
 			transform.rotation = targetRotation;
 		}
 
-		transform.position += (Vector3.forward * moveChar.x) * moveSpeed * Time.deltaTime;
+		transform.position += moveChar * moveSpeed * Time.deltaTime;
 	}
 
 	private void RegisterButtonPresses() {

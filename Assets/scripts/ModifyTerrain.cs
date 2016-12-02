@@ -65,6 +65,30 @@ public class ModifyTerrain : Singleton<ModifyTerrain> {
 		int updateZ = Mathf.FloorToInt(z / world.ChunkSize);
 
 		world.Chunks[updateX, updateY, updateZ].IsUpdate = true;
+
+		if(x - (world.ChunkSize * updateX) == 0 && updateX != 0) {
+			world.Chunks[updateX - 1, updateY, updateZ].IsUpdate = true;
+		}
+
+		if(x - (world.ChunkSize * updateX) == (world.ChunkSize - 1) && updateX != world.Chunks.GetLength(0) - 1) {
+			world.Chunks[updateX + 1, updateY, updateZ].IsUpdate = true;
+		}
+
+		if(y - (world.ChunkSize * updateY) == 0 && updateY != 0) {
+			world.Chunks[updateX, updateY - 1, updateZ].IsUpdate = true;
+		}
+
+		if(y - (world.ChunkSize * updateY) == (world.ChunkSize - 1) && updateY != world.Chunks.GetLength(1) - 1) {
+			world.Chunks[updateX, updateY + 1, updateZ].IsUpdate = true;
+		}
+
+		if(z - (world.ChunkSize * updateZ) == 0 && updateZ != 0) {
+			world.Chunks[updateX, updateY, updateZ - 1].IsUpdate = true;
+		}
+
+		if(z - (world.ChunkSize * updateZ) == (world.ChunkSize - 1) && updateZ != world.Chunks.GetLength(2) - 1) {
+			world.Chunks[updateX, updateY, updateZ + 1].IsUpdate = true;
+		}
 	}
 
 	public void LoadChunks (Vector3 playerPos, float distToLoad, float distToDestroy) {
