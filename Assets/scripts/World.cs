@@ -12,8 +12,6 @@ public class World : MonoBehaviour {
 	[SerializeField]
 	private int worldZ = 16;
 	[SerializeField]
-	private int chunkSize = 16;
-	[SerializeField]
 	private int rockInitialY;
 	[SerializeField]
 	private float rockPerlinScale;
@@ -52,8 +50,27 @@ public class World : MonoBehaviour {
 	[SerializeField]
 	private int grassSecondPerlinConstant;
 
-	private byte[,,] worldData;
+	[SerializeField]
+	private int chunkSize = 16;
+	public int ChunkSize {
+		get {
+			return chunkSize;
+		}
+	}
+
 	private Chunk[,,] chunks;
+	public Chunk[,,] Chunks {
+		get {
+			return chunks;
+		}
+	}
+
+	private byte[,,] worldData;
+	public byte[,,] WorldData {
+		get {
+			return worldData;
+		}
+	}
 
 	private void Start () {
 		worldData = new byte[worldX, worldY, worldZ];
@@ -83,7 +100,7 @@ public class World : MonoBehaviour {
 		for (int x = 0; x < chunks.GetLength(0); x++) {
 			for (int y = 0; y < chunks.GetLength(1); y++) {
 				for (int z = 0; z < chunks.GetLength(2); z++) {
-					GameObject newChunk = Instantiate(chunk, new Vector3(x * chunkSize, y * chunkSize, z * chunkSize), Quaternion.identity) as GameObject;
+					GameObject newChunk = Instantiate(chunk, new Vector3(x * chunkSize - 0.5f, y * chunkSize + 0.5f, z * chunkSize - 0.5f), Quaternion.identity) as GameObject;
 					chunks[x, y, z] = newChunk.GetComponent<Chunk>();
 					chunks[x, y, z].WorldGo = gameObject;
 					chunks[x, y, z].ChunkX = x * chunkSize;

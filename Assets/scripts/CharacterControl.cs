@@ -41,13 +41,15 @@ public class CharacterControl : MonoBehaviour {
 			GameManager.Instance.IsJumping = false;
 		}
 
-		if (GameManager.Instance.IsJumping) {
+		if (GameManager.Instance.IsPunching) {
 			anim.SetTrigger("punch");
+			ModifyTerrain.Instance.DestroyBlock(10f, (byte)TextureType.air.GetHashCode());
 			GameManager.Instance.IsPunching = false;
 		}
 
-		if (GameManager.Instance.IsJumping) {
+		if (GameManager.Instance.IsBuilding) {
 			anim.SetTrigger("punch");
+			ModifyTerrain.Instance.AddBlock(10f, (byte)TextureType.rock.GetHashCode());
 			GameManager.Instance.IsBuilding = false;
 		}
 	}

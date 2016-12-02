@@ -77,6 +77,16 @@ public class Chunk : MonoBehaviour {
 		}
 	}
 
+	private bool isUpdate;
+	public bool IsUpdate {
+		get {
+			return isUpdate;
+		}
+		set {
+			isUpdate = value;
+		}
+	}
+
 	private void Start () {
 		mesh = GetComponent<MeshFilter>().mesh;
 		chunkCollider = GetComponent<MeshCollider>();
@@ -85,7 +95,14 @@ public class Chunk : MonoBehaviour {
 		GenerateMesh();
 	}
 
-	private void GenerateMesh () {
+	private void LateUpdate () {
+		if (isUpdate) {
+			GenerateMesh();
+			isUpdate = false;
+		}
+	}
+
+	public void GenerateMesh () {
 		for (int x = 0; x < chunkSize; x++) {
 			for (int y = 0; y < chunkSize; y++) {
 				for (int z = 0; z < chunkSize; z++) {
